@@ -13,20 +13,13 @@ const Attributes = [
 type Attribute = (typeof Attributes)[number];
 
 function isIn(key: Attribute, obj: any) {
-  let c = false;
-
-  try {
-    c = key in obj;
-  } catch (e) {
-    console.log({ key, obj: JSON.stringify(obj, null, 2) });
-    throw new Error("adasdsa");
-  }
-
-  return c;
+  return key in obj;
 }
 
 function getTitle(obj: any) {
-  return String(obj["title"]).replaceAll("<nemod>", "").replaceAll("</nemod>", "");
+  return String(obj["title"])
+    .replaceAll("<nemod>", "")
+    .replaceAll("</nemod>", "");
 }
 
 function processSees(str: string) {
@@ -75,10 +68,22 @@ function getAll(obj: any) {
   return ob;
 }
 
+type EntryData = {
+  id: string;
+  parentId: string | null;
+  title: string;
+  code: string | null;
+  see: string[] | null;
+  seeAlso: string[] | null;
+  manif: string | null;
+  seecat: string | null;
+  subcat: string | null;
+};
+
 export function recursiveProcess(
   obj: any,
   parentId: string | null = null,
-): any[] {
+): EntryData[] {
   const currentId = uuidv4();
   let baseObject = [{ ...getAll(obj), id: currentId, parentId }];
 
@@ -95,5 +100,6 @@ export function recursiveProcess(
     }
   }
 
+  //@ts-ignore
   return baseObject;
 }
