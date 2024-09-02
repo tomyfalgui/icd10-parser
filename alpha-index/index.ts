@@ -1,16 +1,15 @@
 import { type X2jOptions } from "fast-xml-parser";
+import { AlphaIndexFiles, type FiscalYear } from "../file-mapper.ts";
 import { recursiveProcess } from "./field-operators.ts";
 import { xmlToJson } from "../xml-to-json";
 
-export async function getStructuredIndexEntries() {
+export async function getStructuredIndexEntries(fy: FiscalYear) {
   const alphaIndexOptions: X2jOptions = {
     ignoreAttributes: true,
     stopNodes: ["*.title"],
   };
-  const alphaIndex = await xmlToJson(
-    "./data/2024/alpha-index.xml",
-    alphaIndexOptions,
-  );
+
+  const alphaIndex = await xmlToJson(AlphaIndexFiles[fy], alphaIndexOptions);
 
   const root = alphaIndex["ICD10CM.index"];
   const letters = root["letter"];
